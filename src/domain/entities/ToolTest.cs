@@ -1,5 +1,3 @@
-
-
 using NUnit.Framework;
 using Testes.src.domain.dto;
 using Testes.test.stub;

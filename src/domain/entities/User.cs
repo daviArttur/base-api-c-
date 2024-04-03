@@ -7,7 +7,6 @@ namespace Testes.src.domain.entities
     public int Id { get; } = dto.Id;
 
     public string Email { get; } = dto.Email;
-
     public string Password { get; } = dto.Password;
 
     public static User Create(string email, string password)

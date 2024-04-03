@@ -1,13 +1,15 @@
+using Moq;
 using NUnit.Framework;
+using Testes.src.app.contracts.usecases;
 using Testes.src.app.interfaces;
 using Testes.src.domain.entities;
-using Moq;
 using Testes.test.stub;
 
 namespace Testes.src.app.usecases.user
 {
-  class CreateUserUseCaseTest()
+  public class CreateUserUseCaseTest()
   {
+
     private CreateUserUseCase _usecase = null!;
     private Mock<IUserRepository> _repositoryMock = null!;
     private Mock<IHashService> _hashService = null!;
@@ -17,50 +19,43 @@ namespace Testes.src.app.usecases.user
     {
       this._hashService = new Mock<IHashService>();
       this._repositoryMock = new Mock<IUserRepository>();
-      this._usecase = new CreateUserUseCase(_repositoryMock.Object, _hashService.Object);
+      this._usecase = new CreateUserUseCase(this._repositoryMock.Object, this._hashService.Object);
     }
 
     [Test]
     [Category("unit")]
-    [Description("It should create a new user")]
-    public async Task Test1()
+    public async Task DeveCriarUsuario()
     {
-      // Stub
-      string email = "test@mail.com";
-      string password = "test@mail.com";
-      string hashPassword = "test@mail.com";
-      User expectedUser = null!;
-
       // Arrange
-      _repositoryMock.Setup(repo => repo.FindOneByEmail(email)).ReturnsAsync((User)null!);
-      _repositoryMock.Setup(repo => repo.Save(It.IsAny<User>())).Callback<User>(user => expectedUser = user);
-      _hashService.Setup(repo => repo.Hash(password)).Returns(hashPassword);
-
+      string email = "test@mail.com";
+      string password = "123123";
+      string hashedPassword = "12481749nigh9g8h34";
+      User expectedUser = null!;
+      this._repositoryMock.Setup(repo => repo.Save(It.IsAny<User>())).Callback<User>(user => expectedUser = user);
+      this._hashService.Setup(service => service.Hash(password)).Returns(hashedPassword);
       // Act
       await this._usecase.Perform(email, password);
-
       // Assert
-      _repositoryMock.Verify(repo => repo.Save(It.IsAny<User>()), Times.Once());
-      _hashService.Verify(hash => hash.Hash(password), Times.Once());
+      this._repositoryMock.Verify(repo => repo.FindOneByEmail(email), Times.Once);
+      this._hashService.Verify(service => service.Hash(password), Times.Once);
+      this._repositoryMock.Verify(repo => repo.Save(It.IsAny<User>()), Times.Once);
       Assert.Multiple(() =>
       {
         Assert.That(expectedUser.Id, Is.EqualTo(0));
         Assert.That(expectedUser.Email, Is.EqualTo(email));
-        Assert.That(expectedUser.Password, Is.EqualTo(hashPassword));
+        Assert.That(expectedUser.Password, Is.EqualTo(hashedPassword));
       });
     }
 
     [Test]
     [Category("unit")]
-    [Description("It should throw exception beucase user with email already exists")]
-    public void Test2()
+    public async Task DeveLancarErroUsuarioEmailExistente()
     {
-      // Stub
-      string email = "test@mail.com";
-      string password = "test@mail.com";
-      User userStub = new User(CreateUserDtoStub.GetData(true));
       // Arrange
-      _repositoryMock.Setup(repo => repo.FindOneByEmail(email)).ReturnsAsync(userStub);
+      string email = "test@mail.com";
+      string password = "123123";
+      User userStub = new User(CreateUserDtoStub.GetData());
+      this._repositoryMock.Setup(repo => repo.FindOneByEmail(email)).ReturnsAsync(userStub);
       // Act & Assert
       Assert.ThrowsAsync<UserEmailAlreadyUsedException>(async () =>
       {

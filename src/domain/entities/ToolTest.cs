@@ -12,13 +12,10 @@ namespace Testes.src.domain.entities
     {
       // Stub
       List<string> emptyTagList = [];
-
       // Arrange
       CreateToolDto createToolDto = CreateToolDtoStub.GetData();
-
       // Act
       var Tool = new Tool(createToolDto);
-
       // Assert
       Assert.Multiple(() =>
       {

@@ -1,47 +1,45 @@
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Testes.src.domain.dto;
 
 namespace Testes.src.domain.entities
 {
+
   internal class UserTest()
   {
+
     [Test]
     [Category("unit")]
-    [Description("It should be defined")]
-    public void Test1()
+    public void DeveSerDefinido()
     {
       // Arrange
       CreateUserDto dto = new CreateUserDto(1, "email", "password");
-
       // Act
-      var Tool = new User(dto);
-
+      User user = new User(dto);
       // Assert
       Assert.Multiple(() =>
       {
-        Assert.That(Tool.Id, Is.EqualTo(dto.Id));
-        Assert.That(Tool.Email, Is.EqualTo(dto.Email));
-        Assert.That(Tool.Password, Is.EqualTo(dto.Password));
+        Assert.That(user.Id, Is.EqualTo(dto.Id));
+        Assert.That(user.Email, Is.EqualTo(dto.Email));
+        Assert.That(user.Password, Is.EqualTo(dto.Password));
       });
     }
 
     [Test]
     [Category("unit")]
-    [Description("It return a new User with correct params")]
-    public void Test2()
+    public void DeveCriarUmUsuarioComOsParametrosCorretos()
     {
-      string email = "email";
-      string password = "password";
-
+      // Arrange
+      string email = "email@gow.com";
+      string password = "123";
       // Act
-      var Tool = User.Create(email, password);
-
+      User user = User.Create(email, password);
       // Assert
       Assert.Multiple(() =>
       {
-        Assert.That(Tool.Id, Is.EqualTo(0));
-        Assert.That(Tool.Email, Is.EqualTo(email));
-        Assert.That(Tool.Password, Is.EqualTo(password));
+        Assert.That(user.Id, Is.EqualTo(0));
+        Assert.That(user.Email, Is.EqualTo(email));
+        Assert.That(user.Password, Is.EqualTo(password));
       });
     }
   }

@@ -16,7 +16,7 @@ namespace Testes.test.integration.config
 
         protected override IHost CreateHost(IHostBuilder builder)
         {
-            var root = new InMemoryDatabaseRoot();
+            //var root = new InMemoryDatabaseRoot();
             builder.ConfigureServices(services =>
             {
                 services.RemoveAll(typeof(DbContextOptions<AppDbContext>)); // remove api db context

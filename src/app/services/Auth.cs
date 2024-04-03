@@ -48,7 +48,6 @@ namespace Testes.src.app.services
         private byte[] GetJWTSecretKey()
         {
             var jwtSecretKey = this._configuration["JwtSettings:SecretKey"];
-            Console.WriteLine("aqui");
             if (jwtSecretKey == null) throw new JwtSecretKeyNotFound();
             return Encoding.UTF8.GetBytes(jwtSecretKey);
         }
